@@ -27,23 +27,36 @@ def save_users(df, filename):
         st.error(f"Erro ao salvar os usuários: {e}")
 
 def app():
-    st.title("Login")
+    # Exibir a imagem da logo com o texto na mesma linha
+    logo_path = "https://github.com/Sidneytitan/ayla/raw/main/Logo.png"
+    logo_size = (150, 40)  # Tamanho da imagem (largura, altura)
 
-    # Carregar os usuários existentes
-    users_df = load_users("teladecadastro.xlsx")
+    # Coloque a imagem e o texto em uma linha
+    st.image(logo_path, width=logo_size[0])
+    st.header('Segurança é um valor inegociável', divider='rainbow')
 
-    # Exibir formulário de login
-    username = st.text_input("Nome de usuário")
-    password = st.text_input("Senha", type="password")
+    # Verificar se o usuário está logado
+    if 'is_logged_in' not in st.session_state:
+        st.session_state.is_logged_in = False
 
-    # Verificar o login quando o botão for pressionado
-    if st.button("Login"):
-        if login(username, password, users_df):
-            st.success("Login bem-sucedido!")
-            # Se o login for bem-sucedido, exibir a página de cadastro de usuários
-            show_user_registration_page()
-        else:
-            st.error("Credenciais inválidas. Por favor, tente novamente.")
+    if not st.session_state.is_logged_in:
+        # Exibir formulário de login
+        username = st.text_input("Nome de usuário")
+        password = st.text_input("Senha", type="password")
+
+        # Verificar o login quando o botão for pressionado
+        if st.button("Login"):
+            users_df = load_users("teladecadastro.xlsx")
+            if login(username, password, users_df):
+                st.session_state.is_logged_in = True
+                st.success("Login bem-sucedido!")
+                # Se o login for bem-sucedido, exibir a página de cadastro de usuários
+                show_user_registration_page()
+            else:
+                st.error("Credenciais inválidas. Por favor, tente novamente.")
+    else:
+        # Se o usuário estiver logado, exibir a página de cadastro de usuários
+        show_user_registration_page()
 
 def show_user_registration_page():
     st.title("Cadastro de Usuários")
@@ -85,3 +98,4 @@ def show_user_registration_page():
 
 if __name__ == "__main__":
     app()
+
