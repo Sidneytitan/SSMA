@@ -4,9 +4,9 @@ import pandas as pd
 # Função para carregar dados dos usuários
 def load_usuarios():
     try:
-        df = pd.read_excel("Tools.xlsx")  # Substitua "usuarios.xlsx" pelo caminho correto do arquivo
+        df = pd.read_excel("Tools.xlsx")  # Substitua "Tools.xlsx" pelo caminho correto do arquivo
     except FileNotFoundError:
-        st.error(f"Arquivo 'usuarios.xlsx' não encontrado.")
+        st.error(f"Arquivo 'Tools.xlsx' não encontrado.")
         df = pd.DataFrame(columns=["usuario", "senha"])
     return df
 
@@ -26,21 +26,22 @@ def authenticate(username, password):
 def main():
     st.title("Visualizador de Cadastros")
 
-    if 'logged_in' not in st.session_state:
-        st.session_state['logged_in'] = False
+    if 'logged_in_tools' not in st.session_state:
+        st.session_state['logged_in_tools'] = False
 
-    if not st.session_state['logged_in']:
+    if not st.session_state['logged_in_tools']:
         username = st.text_input("Usuário")
         password = st.text_input("Senha", type="password")
 
         if st.button("Entrar"):
             if authenticate(username, password):
-                st.session_state['logged_in'] = True
+                st.session_state['logged_in_tools'] = True
                 st.success("Autenticação bem-sucedida!")
             else:
                 st.error("Usuário ou senha incorretos. Tente novamente.")
         return
 
+    # Exibe o restante da página apenas se o usuário estiver autenticado corretamente
     file_options = ['teladecadastro.xlsx', 'usuarios.xlsx', 'usuariosinfracoes.xlsx']
     selected_file = st.selectbox("Selecione um arquivo", file_options)
 
