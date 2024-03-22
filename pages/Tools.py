@@ -24,7 +24,7 @@ def authenticate(username, password):
     return False
 
 def main():
-    st.title("Visualizador de Cadastros")
+    st.title("🔒")
 
     if 'logged_in_tools' not in st.session_state:
         st.session_state['logged_in_tools'] = False
