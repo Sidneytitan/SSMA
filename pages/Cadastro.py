@@ -98,4 +98,3 @@ def show_user_registration_page():
 
 if __name__ == "__main__":
     app()
-
